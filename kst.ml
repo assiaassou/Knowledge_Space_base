@@ -1,4 +1,4 @@
-open Str;;
+#load "str.cma";;
 (*Fonction calcule le nombre de states dans la knowledge structure*)
 let rec nbrStates liste = match liste with
   |[] -> 0
@@ -110,4 +110,17 @@ let fermerChannel canal =
     close_in canal                (*fermer le canal donné*)
   with e ->                       (*exception car close_in ne déclanche pas l exception Sys_error lorsqu'elle est appliquée sur un canal d'entré fermé*)
     close_in_noerr canal;
-    raise e;;
+raise e;;
+
+(*-----------------KSP----------------*)
+
+(*Fonction pour vérifier si une knowlege structure est un knowledge space*)
+let rec estKSP kstQ kst = match kstQ,kst with
+  |[],[] -> true
+  |[],kst -> false
+  |kstQ,[] -> false 
+  |state::[],kst -> estKSP (List.tl kst) (List.tl kst)
+  |state::kstQueue,kst -> let unionV1 = concate state (List.hd kstQueue) in
+                          let unionV2 = suppDoublons unionV1 in
+                          if (stateEstPresent unionV2 kst = true) then estKSP (state::(List.tl kstQueue)) kst
+                          else false;;
