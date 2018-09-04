@@ -1,1 +1,1 @@
-dd,ac,eff,abcc,acd,def,abcd,acef,acdef,abcef,abcdef,
+a,ab,bc,abc,
